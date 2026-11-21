@@ -476,6 +476,7 @@ msgstr "Αλλάξτε τις γενικές επιλογές της εφαρμ�
 
 #: src/components/routes/system/charts/sensor-charts.tsx
 #: src/components/routes/system/nut-table.tsx
+#: src/components/routes/system/nut-table.tsx
 msgid "Charge"
 msgstr "Φόρτιση"
 
@@ -2470,6 +2471,12 @@ msgstr "Ενεργοποιείται όταν η χρήση οποιουδήπο
 #: src/components/routes/system/storage-pools-table.tsx
 msgid "Type"
 msgstr "Τύπος"
+
+#: src/components/routes/system/nut-table.tsx
+#: src/components/routes/system/nut-table.tsx
+#: src/components/routes/system/nut-table.tsx
+msgid "Unavailable"
+msgstr ""
 
 #: src/lib/alerts.ts
 msgid "Unhealthy"

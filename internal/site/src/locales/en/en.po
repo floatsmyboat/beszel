@@ -471,6 +471,7 @@ msgstr "Change general application options."
 
 #: src/components/routes/system/charts/sensor-charts.tsx
 #: src/components/routes/system/nut-table.tsx
+#: src/components/routes/system/nut-table.tsx
 msgid "Charge"
 msgstr "Charge"
 
@@ -2465,6 +2466,12 @@ msgstr "Triggers when usage of any disk exceeds a threshold"
 #: src/components/routes/system/storage-pools-table.tsx
 msgid "Type"
 msgstr "Type"
+
+#: src/components/routes/system/nut-table.tsx
+#: src/components/routes/system/nut-table.tsx
+#: src/components/routes/system/nut-table.tsx
+msgid "Unavailable"
+msgstr "Unavailable"
 
 #: src/lib/alerts.ts
 msgid "Unhealthy"

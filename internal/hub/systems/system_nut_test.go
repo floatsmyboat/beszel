@@ -250,6 +250,26 @@ func TestSaveNutDevices_WithOutlets(t *testing.T) {
 	assert.Equal(t, 300.0, storedOutlets[0].Power)
 }
 
+func TestNutBatteryReported(t *testing.T) {
+	sys, app := newTestSystemWithHub(t)
+	for _, tc := range []struct {
+		data            nut.NutData
+		charge, runtime bool
+	}{
+		{nut.NutData{BatteryVoltage: 13.4}, false, false},
+		{nut.NutData{BatteryChargeReported: true, BatteryRuntimeReported: true}, true, true},
+		{nut.NutData{BatteryCharge: 80}, true, false}, // An older agent still provides a known positive value.
+	} {
+		err := sys.saveNutDevices(map[string]nut.NutData{"ups": tc.data}, true, nil)
+		require.NoError(t, err)
+		device, err := app.FindRecordById("nut_devices", MakeStableHashId(sys.Id, "ups"))
+		require.NoError(t, err)
+		assert.Equal(t, tc.charge, device.GetBool("battery_charge_reported"))
+		assert.Equal(t, tc.runtime, device.GetBool("battery_runtime_reported"))
+		assert.Equal(t, tc.data.BatteryCharge, device.GetFloat("battery_charge"))
+	}
+}
+
 func TestSaveNutDevices_PowerSource(t *testing.T) {
 	sys, app := newTestSystemWithHub(t)
 	for _, source := range []string{"measured", "estimated", "unknown"} {

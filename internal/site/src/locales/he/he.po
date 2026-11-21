@@ -476,6 +476,7 @@ msgstr "שנה אפשרויות כלליות של היישום."
 
 #: src/components/routes/system/charts/sensor-charts.tsx
 #: src/components/routes/system/nut-table.tsx
+#: src/components/routes/system/nut-table.tsx
 msgid "Charge"
 msgstr "טעינה"
 
@@ -2470,6 +2471,12 @@ msgstr "מופעל כאשר שימוש בכל דיסק עולה על סף"
 #: src/components/routes/system/storage-pools-table.tsx
 msgid "Type"
 msgstr "סוג"
+
+#: src/components/routes/system/nut-table.tsx
+#: src/components/routes/system/nut-table.tsx
+#: src/components/routes/system/nut-table.tsx
+msgid "Unavailable"
+msgstr ""
 
 #: src/lib/alerts.ts
 msgid "Unhealthy"

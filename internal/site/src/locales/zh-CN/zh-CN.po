@@ -476,6 +476,7 @@ msgstr "更改常规应用程序选项。"
 
 #: src/components/routes/system/charts/sensor-charts.tsx
 #: src/components/routes/system/nut-table.tsx
+#: src/components/routes/system/nut-table.tsx
 msgid "Charge"
 msgstr "充电"
 
@@ -2470,6 +2471,12 @@ msgstr "当任何磁盘的使用率超过阈值时触发"
 #: src/components/routes/system/storage-pools-table.tsx
 msgid "Type"
 msgstr "类型"
+
+#: src/components/routes/system/nut-table.tsx
+#: src/components/routes/system/nut-table.tsx
+#: src/components/routes/system/nut-table.tsx
+msgid "Unavailable"
+msgstr ""
 
 #: src/lib/alerts.ts
 msgid "Unhealthy"

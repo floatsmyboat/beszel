@@ -476,6 +476,7 @@ msgstr "Umumiy dastur parametrlarini o'zgartiring."
 
 #: src/components/routes/system/charts/sensor-charts.tsx
 #: src/components/routes/system/nut-table.tsx
+#: src/components/routes/system/nut-table.tsx
 msgid "Charge"
 msgstr "Zaryad"
 
@@ -2470,6 +2471,12 @@ msgstr "Biron-bir disk ishlatilishi chegaradan oshganda ishga tushadi"
 #: src/components/routes/system/storage-pools-table.tsx
 msgid "Type"
 msgstr "Tur"
+
+#: src/components/routes/system/nut-table.tsx
+#: src/components/routes/system/nut-table.tsx
+#: src/components/routes/system/nut-table.tsx
+msgid "Unavailable"
+msgstr ""
 
 #: src/lib/alerts.ts
 msgid "Unhealthy"

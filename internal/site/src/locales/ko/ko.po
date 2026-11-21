@@ -476,6 +476,7 @@ msgstr "일반 애플리케이션 옵션 변경."
 
 #: src/components/routes/system/charts/sensor-charts.tsx
 #: src/components/routes/system/nut-table.tsx
+#: src/components/routes/system/nut-table.tsx
 msgid "Charge"
 msgstr "충전"
 
@@ -2470,6 +2471,12 @@ msgstr "디스크 사용량이 임계값을 초과할 때 트리거됩니다."
 #: src/components/routes/system/storage-pools-table.tsx
 msgid "Type"
 msgstr "유형"
+
+#: src/components/routes/system/nut-table.tsx
+#: src/components/routes/system/nut-table.tsx
+#: src/components/routes/system/nut-table.tsx
+msgid "Unavailable"
+msgstr ""
 
 #: src/lib/alerts.ts
 msgid "Unhealthy"

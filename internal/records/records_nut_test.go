@@ -63,7 +63,7 @@ func TestNutSparseAggregation(t *testing.T) {
 	_, err = tests.CreateRecord(hub, "nut_stats", map[string]any{
 		"system": sys.Id, "device": "testups00000001", "type": "1m",
 		"created":        time.Now().UTC().Add(-time.Minute).Format(types.DefaultDateLayout),
-		"battery_charge": 65.0,
+		"battery_charge": 65.0, "battery_charge_reported": true,
 	})
 	require.NoError(t, err)
 
@@ -73,4 +73,31 @@ func TestNutSparseAggregation(t *testing.T) {
 	require.NoError(t, err)
 	require.Len(t, rows, 1, "single sample must aggregate despite the minShorterRecords threshold")
 	require.Equal(t, 65.0, rows[0].GetFloat("battery_charge"))
+}
+
+func TestNutBatteryRollupDistinguishesMissingAndZero(t *testing.T) {
+	hub, err := tests.NewTestHub(t.TempDir())
+	require.NoError(t, err)
+	defer hub.Cleanup()
+	user, err := tests.CreateUser(hub, "battery-rollup@example.com", "testtesttest")
+	require.NoError(t, err)
+	sys, err := tests.CreateRecord(hub, "systems", map[string]any{"name": "ups", "host": "localhost", "users": []string{user.Id}, "status": "up"})
+	require.NoError(t, err)
+	for _, sample := range []struct {
+		charge   int
+		reported bool
+	}{{80, true}, {0, true}, {0, false}} {
+		_, err = tests.CreateRecord(hub, "nut_stats", map[string]any{
+			"system": sys.Id, "device": "testups00000001", "type": "1m", "created": time.Now().UTC().Add(-time.Minute).Format(types.DefaultDateLayout),
+			"battery_charge": sample.charge, "battery_charge_reported": sample.reported,
+		})
+		require.NoError(t, err)
+	}
+	records.NewRecordManager(hub).CreateLongerRecords()
+	rows, err := hub.FindAllRecords("nut_stats", dbx.HashExp{"system": sys.Id, "type": "10m"})
+	require.NoError(t, err)
+	require.Len(t, rows, 1)
+	require.Equal(t, 40.0, rows[0].GetFloat("battery_charge"))
+	require.True(t, rows[0].GetBool("battery_charge_reported"))
+	require.False(t, rows[0].GetBool("battery_runtime_reported"))
 }

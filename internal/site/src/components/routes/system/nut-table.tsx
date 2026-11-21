@@ -34,7 +34,7 @@ import {
 } from "lucide-react"
 import { Card, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
 import { DataTablePagination, usePagination } from "@/components/ui/data-table-pagination"
-import LineChartDefault from "@/components/charts/line-chart"
+import LineChartDefault, { type DataPoint } from "@/components/charts/line-chart"
 import ChartTimeSelect from "@/components/charts/chart-time-select"
 import { ChartCard } from "./chart-card"
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle } from "@/components/ui/sheet"
@@ -72,7 +72,7 @@ import { atom } from "nanostores"
 const $nutChartTime = atom<ChartTimes>("1h")
 
 const NUT_DEVICE_FIELDS =
-	"id,system,name,model,manufacturer,serial,firmware,driver,device_type,state,status,battery_charge,battery_voltage,battery_runtime,input_voltage,output_voltage,input_nominal,load,output_current,output_power,output_power_source,updated"
+	"id,system,name,model,manufacturer,serial,firmware,driver,device_type,state,status,battery_charge,battery_charge_reported,battery_voltage,battery_runtime,battery_runtime_reported,input_voltage,output_voltage,input_nominal,load,output_current,output_power,output_power_source,updated"
 
 function nutPowerValue(record: NutDeviceRecord | NutStatsRecord): number | null {
 	return record.output_power_source === "measured" || record.output_power_source === "estimated"
@@ -182,13 +182,19 @@ export const createColumns = (): ColumnDef<NutDeviceRecord>[] => [
 		},
 	},
 	{
-		accessorKey: "battery_charge",
+		id: "battery_charge",
+		accessorFn: (device) => (device.battery_charge_reported ? device.battery_charge : undefined),
+		sortUndefined: "last",
 		invertSorting: true,
 		header: ({ column }) => <HeaderButton column={column} name={t`Battery`} Icon={BatteryLow} />,
 		cell: ({ getValue }) => {
 			const charge = getValue() as number | undefined
-			if (charge == null || charge === 0) {
-				return <div className="text-sm text-muted-foreground ms-1">N/A</div>
+			if (charge == null) {
+				return (
+					<div className="text-sm text-muted-foreground ms-1">
+						<Trans>Unavailable</Trans>
+					</div>
+				)
 			}
 			return (
 				<div className="text-sm ms-1">
@@ -646,7 +652,7 @@ function DeviceSheet({
 						created: getPbTimestamp(chartTime),
 					}),
 					fields:
-						"created,battery_charge,battery_runtime,battery_voltage,input_voltage,output_voltage,load,output_current,output_power,output_power_source",
+						"created,battery_charge,battery_charge_reported,battery_runtime,battery_runtime_reported,battery_voltage,input_voltage,output_voltage,load,output_current,output_power,output_power_source",
 					sort: "created",
 				})
 				.then((records) => {
@@ -683,9 +689,10 @@ function DeviceSheet({
 	const driver = device?.driver
 	const health = device?.state || unknown
 	const deviceType = device?.device_type || unknown
-	const batteryCharge = device?.battery_charge
+	const batteryCharge = device?.battery_charge_reported ? device.battery_charge : null
 	const batteryVoltage = device?.battery_voltage
-	const batteryRuntime = device?.battery_runtime
+	const batteryRuntime = device?.battery_runtime_reported ? device.battery_runtime : null
+	const hasBatteryVoltage = batteryVoltage != null && batteryVoltage > 0
 	const inputVoltage = device?.input_voltage
 	const outputVoltage = device?.output_voltage
 	const inputNominal = device?.input_nominal
@@ -707,6 +714,24 @@ function DeviceSheet({
 		[chartTime]
 	)
 	const chartEmpty = !statsLoading && stats.length === 0
+	const chartHasCharge = batteryCharge != null || stats.some((sample) => sample.battery_charge_reported)
+	const chartHasRuntime = batteryRuntime != null || stats.some((sample) => sample.battery_runtime_reported)
+	const batterySeries: DataPoint<NutStatsRecord>[] = []
+	if (chartHasCharge) {
+		batterySeries.push({
+			label: t`Charge`,
+			color: 2,
+			dataKey: (sample) => (sample.battery_charge_reported ? sample.battery_charge : null),
+		})
+	}
+	if (chartHasRuntime) {
+		batterySeries.push({
+			label: t`Runtime`,
+			color: 4,
+			yAxisId: chartHasCharge ? "right" : "left",
+			dataKey: (sample) => (sample.battery_runtime_reported ? sample.battery_runtime : null),
+		})
+	}
 
 	return (
 		<Sheet open={open} onOpenChange={onOpenChange}>
@@ -783,22 +808,18 @@ function DeviceSheet({
 									</div>
 									<div className="font-medium uppercase">{deviceType}</div>
 								</div>
-								{batteryCharge != null && batteryCharge > 0 && (
+								{(deviceType === "ups" || batteryCharge != null || hasBatteryVoltage || batteryRuntime != null) && (
 									<div className="rounded-md border p-3">
 										<div className="text-muted-foreground text-xs mb-1">
 											<Trans>Battery</Trans>
 										</div>
-										<div className="font-medium">
-											{toFixedFloat(batteryCharge, 0)}%
-											{batteryVoltage != null && batteryVoltage > 0 && (
-												<span className="text-muted-foreground ml-2">{toFixedFloat(batteryVoltage, 1)} V</span>
-											)}
-										</div>
-										{batteryRuntime != null && batteryRuntime > 0 && (
-											<div className="text-muted-foreground text-xs mt-1">
-												<Trans>Runtime</Trans>: {secondsToString(batteryRuntime, "minute")}
-											</div>
-										)}
+										{hasBatteryVoltage && <div className="font-medium">{toFixedFloat(batteryVoltage, 1)} V</div>}
+										<dl className="grid grid-cols-[auto_1fr] gap-x-2 text-xs mt-1">
+											<dt className="text-muted-foreground"><Trans>Charge</Trans></dt>
+											<dd>{batteryCharge == null ? t`Unavailable` : `${toFixedFloat(batteryCharge, 0)}%`}</dd>
+											<dt className="text-muted-foreground"><Trans>Runtime</Trans></dt>
+											<dd>{batteryRuntime == null ? t`Unavailable` : secondsToString(batteryRuntime, "minute")}</dd>
+										</dl>
 									</div>
 								)}
 								{inputVoltage != null && inputVoltage > 0 && (
@@ -854,34 +875,30 @@ function DeviceSheet({
 								/>
 							</div>
 							<div className="grid gap-4 lg:grid-cols-2">
-								<ChartCard
-									empty={chartEmpty}
-									grid={true}
-									title={t`Battery`}
-									description={t`Battery charge and estimated runtime over time`}
-								>
-									<LineChartDefault
-										chartData={chartData}
-										customData={stats}
-										tickFormatter={(value) => `${toFixedFloat(value, 0)}%`}
-										tickFormatter2={(value) => secondsToString(value, "minute")}
-										contentFormatter={(item) =>
-											item.name === t`Runtime`
-												? secondsToString(item.value, "minute")
-												: `${toFixedFloat(item.value, 1)}%`
-										}
-										legend={true}
-										dataPoints={[
-											{ label: t`Charge`, color: 2, dataKey: (point: NutStatsRecord) => point.battery_charge },
-											{
-												label: t`Runtime`,
-												color: 4,
-												yAxisId: "right",
-												dataKey: (point: NutStatsRecord) => point.battery_runtime,
-											},
-										]}
-									/>
-								</ChartCard>
+								{batterySeries.length > 0 && (
+									<ChartCard
+										empty={chartEmpty}
+										grid={true}
+										title={t`Battery`}
+										description={t`Battery charge and estimated runtime over time`}
+									>
+										<LineChartDefault
+											chartData={chartData}
+											customData={stats}
+											tickFormatter={(value) =>
+												chartHasCharge ? `${toFixedFloat(value, 0)}%` : secondsToString(value, "minute")
+											}
+											tickFormatter2={(value) => secondsToString(value, "minute")}
+											contentFormatter={(item) =>
+												item.name === t`Runtime`
+													? secondsToString(item.value, "minute")
+													: `${toFixedFloat(item.value, 1)}%`
+											}
+											legend={true}
+											dataPoints={batterySeries}
+										/>
+									</ChartCard>
+								)}
 								<ChartCard
 									empty={chartEmpty}
 									grid={true}
