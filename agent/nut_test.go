@@ -53,6 +53,11 @@ func TestParseNutDataBasic(t *testing.T) {
 	assert.Nil(t, data.Outlets)
 }
 
+func TestParseNutDataDeviceModel(t *testing.T) {
+	data := parseNutData("volt-micro-1000", map[string]string{"device.model": "MICRO 1000"})
+	assert.Equal(t, "MICRO 1000", data.Model)
+}
+
 func TestParseNutDataEmptyModelFallsBackToName(t *testing.T) {
 	vars := map[string]string{
 		"ups.status": "OL",

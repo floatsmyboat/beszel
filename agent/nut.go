@@ -276,7 +276,7 @@ func (nm *NutManager) GetSampledNames() []string {
 // parseNutData maps the flat NUT variable set to a NutData record.
 func parseNutData(name string, vars map[string]string) nut.NutData {
 	data := nut.NutData{
-		Model:        vars["ups.model"],
+		Model:        firstNonEmpty(vars["ups.model"], vars["device.model"], name),
 		Manufacturer: firstNonEmpty(vars["ups.manufacturer"], vars["ups.mfr"], vars["device.mfr"]),
 		Serial:       vars["ups.serial"],
 		Firmware:     vars["ups.firmware"],
@@ -298,10 +298,6 @@ func parseNutData(name string, vars map[string]string) nut.NutData {
 	data.DeviceType = detectDeviceType(vars)
 	data.Outlets = parseOutlets(vars)
 
-	// Prefer the driver-reported model when the generic one is empty.
-	if data.Model == "" {
-		data.Model = name
-	}
 	return data
 }
 
