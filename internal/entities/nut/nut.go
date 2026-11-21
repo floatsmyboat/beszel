@@ -42,6 +42,11 @@ type NutData struct {
 	BatteryVoltage float64 `json:"bv,omitempty" cbor:"10,keyasint,omitempty"` // volts
 	BatteryRuntime int64   `json:"br,omitempty" cbor:"11,keyasint,omitempty"` // seconds
 
+	// Zero is valid for both charge and runtime. The flags distinguish an explicit
+	// zero from a NUT variable omitted by the device.
+	BatteryChargeReported  bool `json:"bcr,omitempty" cbor:"20,keyasint,omitempty"`
+	BatteryRuntimeReported bool `json:"brr,omitempty" cbor:"21,keyasint,omitempty"`
+
 	// Voltages
 	InputVoltage  float64 `json:"iv,omitempty" cbor:"12,keyasint,omitempty"`  // volts
 	OutputVoltage float64 `json:"ov,omitempty" cbor:"13,keyasint,omitempty"`  // volts

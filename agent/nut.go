@@ -285,9 +285,12 @@ func parseNutData(name string, vars map[string]string) nut.NutData {
 		Health:       deriveHealth(vars["ups.status"]),
 	}
 
-	data.BatteryCharge = parseFloat(vars["battery.charge"])
+	if charge, err := strconv.ParseFloat(strings.TrimSpace(vars["battery.charge"]), 64); err == nil && charge >= 0 && charge <= 100 {
+		data.BatteryCharge = charge
+		data.BatteryChargeReported = true
+	}
 	data.BatteryVoltage = parseFloat(vars["battery.voltage"])
-	data.BatteryRuntime = parseInt64(vars["battery.runtime"])
+	data.BatteryRuntime, data.BatteryRuntimeReported = parseNutRuntime(vars["battery.runtime"])
 	data.InputVoltage = parseFloat(vars["input.voltage"])
 	data.OutputVoltage = parseFloat(vars["output.voltage"])
 	data.InputNominal = parseFloat(vars["input.voltage.nominal"])
@@ -439,13 +442,10 @@ func parseFloat(s string) float64 {
 	return v
 }
 
-func parseInt64(s string) int64 {
-	if s == "" {
-		return 0
-	}
+func parseNutRuntime(s string) (int64, bool) {
 	v, err := strconv.ParseInt(strings.TrimSpace(s), 10, 64)
-	if err != nil {
-		return 0
+	if err != nil || v < 0 {
+		return 0, false
 	}
-	return v
+	return v, true
 }

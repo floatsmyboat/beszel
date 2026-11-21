@@ -476,6 +476,7 @@ msgstr "修改一般應用程式選項。"
 
 #: src/components/routes/system/charts/sensor-charts.tsx
 #: src/components/routes/system/nut-table.tsx
+#: src/components/routes/system/nut-table.tsx
 msgid "Charge"
 msgstr "充電"
 
@@ -2470,6 +2471,12 @@ msgstr "當任何磁碟使用率超過閾值時觸發"
 #: src/components/routes/system/storage-pools-table.tsx
 msgid "Type"
 msgstr "類型"
+
+#: src/components/routes/system/nut-table.tsx
+#: src/components/routes/system/nut-table.tsx
+#: src/components/routes/system/nut-table.tsx
+msgid "Unavailable"
+msgstr ""
 
 #: src/lib/alerts.ts
 msgid "Unhealthy"

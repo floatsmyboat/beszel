@@ -476,6 +476,7 @@ msgstr "Смени общите опции на приложението."
 
 #: src/components/routes/system/charts/sensor-charts.tsx
 #: src/components/routes/system/nut-table.tsx
+#: src/components/routes/system/nut-table.tsx
 msgid "Charge"
 msgstr "Заряд"
 
@@ -2470,6 +2471,12 @@ msgstr "Задейства се, когато употребата на няко
 #: src/components/routes/system/storage-pools-table.tsx
 msgid "Type"
 msgstr "Тип"
+
+#: src/components/routes/system/nut-table.tsx
+#: src/components/routes/system/nut-table.tsx
+#: src/components/routes/system/nut-table.tsx
+msgid "Unavailable"
+msgstr ""
 
 #: src/lib/alerts.ts
 msgid "Unhealthy"

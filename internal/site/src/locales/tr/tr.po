@@ -476,6 +476,7 @@ msgstr "Genel uygulama seçeneklerini değiştirin."
 
 #: src/components/routes/system/charts/sensor-charts.tsx
 #: src/components/routes/system/nut-table.tsx
+#: src/components/routes/system/nut-table.tsx
 msgid "Charge"
 msgstr "Şarj"
 
@@ -2470,6 +2471,12 @@ msgstr "Herhangi bir diskin kullanımı bir eşiği aştığında tetiklenir"
 #: src/components/routes/system/storage-pools-table.tsx
 msgid "Type"
 msgstr "Tür"
+
+#: src/components/routes/system/nut-table.tsx
+#: src/components/routes/system/nut-table.tsx
+#: src/components/routes/system/nut-table.tsx
+msgid "Unavailable"
+msgstr ""
 
 #: src/lib/alerts.ts
 msgid "Unhealthy"

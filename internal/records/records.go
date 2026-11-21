@@ -273,12 +273,25 @@ func (rm *RecordManager) createLongerNutRecords(app core.App, collection *core.C
 			record.Set("system", systemID)
 			record.Set("device", device.Id)
 			record.Set("type", period.longerType)
-			for _, field := range []string{"battery_charge", "battery_runtime", "battery_voltage", "input_voltage", "output_voltage", "load", "output_current"} {
+			for _, field := range []string{"battery_voltage", "input_voltage", "output_voltage", "load", "output_current"} {
 				total := 0.0
 				for _, row := range rows {
 					total += row.GetFloat(field)
 				}
 				record.Set(field, total/float64(len(rows)))
+			}
+			for _, field := range []string{"battery_charge", "battery_runtime"} {
+				total, count := 0.0, 0
+				for _, row := range rows {
+					if row.GetBool(field + "_reported") {
+						total += row.GetFloat(field)
+						count++
+					}
+				}
+				if count > 0 {
+					record.Set(field, total/float64(count))
+					record.Set(field+"_reported", true)
+				}
 			}
 			// Missing or legacy power values must not become zero-watt samples.
 			powerTotal, powerCount := 0.0, 0

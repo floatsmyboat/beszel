@@ -476,6 +476,7 @@ msgstr "تغییر گزینه‌های کلی برنامه."
 
 #: src/components/routes/system/charts/sensor-charts.tsx
 #: src/components/routes/system/nut-table.tsx
+#: src/components/routes/system/nut-table.tsx
 msgid "Charge"
 msgstr "شارژ"
 
@@ -2470,6 +2471,12 @@ msgstr "هنگامی که استفاده از هر دیسکی از یک آستا
 #: src/components/routes/system/storage-pools-table.tsx
 msgid "Type"
 msgstr "نوع"
+
+#: src/components/routes/system/nut-table.tsx
+#: src/components/routes/system/nut-table.tsx
+#: src/components/routes/system/nut-table.tsx
+msgid "Unavailable"
+msgstr ""
 
 #: src/lib/alerts.ts
 msgid "Unhealthy"

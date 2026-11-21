@@ -305,11 +305,20 @@ func TestParseFloat(t *testing.T) {
 	assert.Equal(t, 42.0, parseFloat(" 42 "))
 }
 
-func TestParseInt64(t *testing.T) {
-	assert.Equal(t, int64(0), parseInt64(""))
-	assert.Equal(t, int64(1800), parseInt64("1800"))
-	assert.Equal(t, int64(0), parseInt64("abc"))
-	assert.Equal(t, int64(42), parseInt64(" 42 "))
+func TestNutBatteryAvailability(t *testing.T) {
+	for _, tc := range []struct {
+		value   string
+		charge  bool
+		runtime bool
+	}{
+		{"", false, false}, {"invalid", false, false}, {"-1", false, false},
+		{"NaN", false, false}, {" 0 ", true, true}, {"42", true, true},
+		{"42.5", true, false}, {"1800", false, true},
+	} {
+		data := parseNutData("ups", map[string]string{"battery.charge": tc.value, "battery.runtime": tc.value})
+		assert.Equal(t, tc.charge, data.BatteryChargeReported, tc.value)
+		assert.Equal(t, tc.runtime, data.BatteryRuntimeReported, tc.value)
+	}
 }
 func TestNutRealPower(t *testing.T) {
 	for _, tc := range []struct {

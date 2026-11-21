@@ -566,8 +566,10 @@ export interface NutDeviceRecord extends RecordModel {
 	state: string
 	status: string
 	battery_charge: number
+	battery_charge_reported: boolean
 	battery_voltage: number
 	battery_runtime: number
+	battery_runtime_reported: boolean
 	input_voltage: number
 	output_voltage: number
 	input_nominal: number
@@ -585,7 +587,9 @@ export interface NutStatsRecord extends RecordModel {
 	type: "1m" | "10m" | "20m" | "120m" | "480m"
 	created: string | number
 	battery_charge: number
+	battery_charge_reported: boolean
 	battery_runtime: number
+	battery_runtime_reported: boolean
 	battery_voltage: number
 	input_voltage: number
 	output_voltage: number

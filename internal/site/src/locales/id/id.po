@@ -476,6 +476,7 @@ msgstr "Ubah pengaturan umum aplikasi."
 
 #: src/components/routes/system/charts/sensor-charts.tsx
 #: src/components/routes/system/nut-table.tsx
+#: src/components/routes/system/nut-table.tsx
 msgid "Charge"
 msgstr "Isi baterai"
 
@@ -2470,6 +2471,12 @@ msgstr "Dipicu ketika penggunaan disk apa pun melebihi ambang batas"
 #: src/components/routes/system/storage-pools-table.tsx
 msgid "Type"
 msgstr "Tipe"
+
+#: src/components/routes/system/nut-table.tsx
+#: src/components/routes/system/nut-table.tsx
+#: src/components/routes/system/nut-table.tsx
+msgid "Unavailable"
+msgstr ""
 
 #: src/lib/alerts.ts
 msgid "Unhealthy"

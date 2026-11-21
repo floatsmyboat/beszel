@@ -476,6 +476,7 @@ msgstr "Canvia les opcions generals de l'aplicació."
 
 #: src/components/routes/system/charts/sensor-charts.tsx
 #: src/components/routes/system/nut-table.tsx
+#: src/components/routes/system/nut-table.tsx
 msgid "Charge"
 msgstr "Càrrega"
 
@@ -2459,6 +2460,12 @@ msgstr "S'activa quan l'ús de qualsevol disc supera un llindar"
 #: src/components/routes/system/storage-pools-table.tsx
 msgid "Type"
 msgstr "Tipus"
+
+#: src/components/routes/system/nut-table.tsx
+#: src/components/routes/system/nut-table.tsx
+#: src/components/routes/system/nut-table.tsx
+msgid "Unavailable"
+msgstr ""
 
 #: src/lib/alerts.ts
 msgid "Unhealthy"

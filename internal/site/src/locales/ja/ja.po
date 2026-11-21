@@ -476,6 +476,7 @@ msgstr "一般的なアプリケーションオプションを変更します。
 
 #: src/components/routes/system/charts/sensor-charts.tsx
 #: src/components/routes/system/nut-table.tsx
+#: src/components/routes/system/nut-table.tsx
 msgid "Charge"
 msgstr "充電"
 
@@ -2470,6 +2471,12 @@ msgstr "ディスクの使用量がしきい値を超えたときにトリガー
 #: src/components/routes/system/storage-pools-table.tsx
 msgid "Type"
 msgstr "タイプ"
+
+#: src/components/routes/system/nut-table.tsx
+#: src/components/routes/system/nut-table.tsx
+#: src/components/routes/system/nut-table.tsx
+msgid "Unavailable"
+msgstr ""
 
 #: src/lib/alerts.ts
 msgid "Unhealthy"
